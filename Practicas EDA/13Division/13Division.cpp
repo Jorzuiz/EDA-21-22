@@ -12,24 +12,35 @@ using namespace std;
 // Su coste es lineal; Recorre solo una vez el vector
 bool resolver(vector <int> datos, int posicion) {
 
-    for (int i = 0; i < datos.size(); i++)
-    {
+    // Si la posicion está en el ultimo valor del vector siempre devolvemos true
+    if (posicion >= datos.size()-1)
+        return true;
 
-        // Valores anteriores a la posicion tienen que ser menores
-        if (i < posicion) {
-            if (datos[i] > datos[posicion])
-                return false;
+    else {
+        // Guardamos el maximo de los valores en el lado izquierdo
+        // y el menor de los valores en el lado derecho
+        int max = 0, min = 300001;
+
+        for (int i = 0; i <= posicion; i++)
+        {
+            // Detecta el mayor de los valores de p a la izquierda
+            if (datos[i] > max)
+                max = datos[i];
         }
 
-        // Valores posteriores a la posicion tienen que ser mayores
-        else {
-            if (datos[posicion] < datos[i])
-                return false;
+        for (int i = posicion + 1; i < datos.size(); i++)
+        {
+            if (datos[i] < min)
+                min = datos[i];
         }
+
+        // El lado izquierdo tiene que ser estrictamente menor
+        if (max < min) {
+            return true;
+        }
+
     }
-    // Si no se encuentra un valor que rompa la condicion
-    return true;
-
+    return false;
 }
 
 // Resuelve un caso de prueba, leyendo de la entrada la
@@ -39,7 +50,7 @@ void resuelveCaso() {
 
     vector <int> datos;
     int size, posicion, val;
-    
+
     // El caso contiene un entero con el tamaño de los datos (1 n) y otro con la posicion a evaluar(0 n-1)
     cin >> size;
     cin >> posicion;
@@ -53,8 +64,8 @@ void resuelveCaso() {
 
 
     if (resolver(datos, posicion))
-        cout << "SI\n";
-    else cout << "NO\n";
+        cout << "SI" << "\n";
+    else cout << "NO" << "\n";
     // escribir sol
 
 

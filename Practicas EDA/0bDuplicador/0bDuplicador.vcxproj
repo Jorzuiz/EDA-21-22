@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b70e2096-0967-4c25-95e3-1852f3daa2ec}</ProjectGuid>
-    <RootNamespace>My21Division</RootNamespace>
+    <ProjectGuid>{dfc648f9-d74e-4139-88f7-418cbe77b385}</ProjectGuid>
+    <RootNamespace>My0bDuplicador</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="21Division.cpp" />
+    <ClCompile Include="0bDuplicador.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
