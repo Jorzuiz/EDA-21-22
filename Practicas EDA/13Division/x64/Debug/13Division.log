@@ -1,2 +1,4 @@
 ﻿  13Division.cpp
+C:\Users\jorda\OneDrive\Documentos\GitHub\EDA-21-22\Practicas EDA\13Division\13Division.cpp(21,57): warning C4101: 'invertido': variable local sin referencia
+C:\Users\jorda\OneDrive\Documentos\GitHub\EDA-21-22\Practicas EDA\13Division\13Division.cpp(46,9): warning C4101: 'size': variable local sin referencia
   13Division.vcxproj -> C:\Users\jorda\OneDrive\Documentos\GitHub\EDA-21-22\Practicas EDA\x64\Debug\13Division.exe

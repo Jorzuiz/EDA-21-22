@@ -4,48 +4,40 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
-// Función que resuelve el problema de manera recursiva
+// función que resuelve el problema
 // Su coste es lineal; Recorre solo una vez el vector
-int resolver(int datos) {
+bool resolver(vector <int> datos, int posicion) {
 
-    return 0;
-}
-
-int complementario(int numero) {
-    
-    int factor = 1;
-    int digito, digito_complemento, complementario = 0, invertido;
-    
-    while(factor < numero){
-
-        digito = numero / factor % 10;  // Resto
-        digito_complemento = 9 - digito;
-        complementario += digito_complemento;
-
-        // Cambiamos al segundo digito en el divisor y el complementario
-        factor *= 10; ;
-        complementario *= 10;
-        
-    }
-
-    return complementario / 10;
+    return false;
 }
 
 // Resuelve un caso de prueba, leyendo de la entrada la
 // configuración, y escribiendo la respuesta
 void resuelveCaso() {
-
     // leer los datos de la entrada
 
-    int numero;
-    int size;
+    vector <int> datos;
+    int size, posicion, val;
 
-    cin >> numero;
-    
-    cout << complementario(numero) << "\n";
+    // El caso contiene un entero con el tamaño de los datos (1 n) y otro con la posicion a evaluar(0 n-1)
+    cin >> size;
+    cin >> posicion;
+
+
+    for (int i = 0; i < size; i++)
+    {
+        cin >> val;
+        datos.push_back(val);
+    }
+
+
+    if (resolver(datos, posicion))
+        cout << "SI" << "\n";
+    else cout << "NO" << "\n";
     // escribir sol
 
 
