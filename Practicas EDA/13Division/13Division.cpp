@@ -3,16 +3,9 @@
 
 #include <iostream>
 #include <iomanip>
-#include <fstream>
+#include <fstream> 
 
 using namespace std;
-
-// Función que resuelve el problema de manera recursiva
-// Su coste es lineal; Recorre solo una vez el vector
-int resolver(int datos) {
-
-    return 0;
-}
 
 int complementario(int numero) {
     
@@ -32,6 +25,28 @@ int complementario(int numero) {
     }
 
     return complementario / 10;
+}
+
+int comp(int n) {
+    if (n < 10) {
+        return n;
+    }
+    else {
+        int comPre = comp(n / 10);
+        int comDig = 9 - (n % 10);
+        return comPre * 10 + comDig;
+
+        // if n< 10
+        // newpot = 10
+        // return 9-n;
+
+        // int comPre = comp(n/10, pot);
+        // int comDig = 9 - n % 10;
+        // newpot = 10 * pot;
+        // return pot * comDig + comPre;
+
+    }
+
 }
 
 // Resuelve un caso de prueba, leyendo de la entrada la

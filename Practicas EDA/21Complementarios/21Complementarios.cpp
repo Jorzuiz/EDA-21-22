@@ -3,41 +3,60 @@
 
 #include <iostream>
 #include <iomanip>
-#include <fstream>
-#include <vector>
+#include <fstream> 
 
 using namespace std;
 
-// función que resuelve el problema
-// Su coste es lineal; Recorre solo una vez el vector
-bool resolver(vector <int> datos, int posicion) {
+// Se ejecuta N veces siendo N el tamaño de la entrada
+int complementario(int n) {
 
-    return false;
+    // Caso base de solo 1 digito
+    if (n < 10) {
+        return 9 - n;
+    }
+    // Caso recursivo
+    else {
+
+        int comPre = complementario(n / 10);    // Reduce el numero y lo llama de manera recursiva
+        int comDig = 9 - (n % 10);              // Amacena el complementario del resto; el último dígito
+        return comPre * 10 + comDig;
+
+    }
+}
+
+int complementarioInvertido(const int& n, int& newpot) {
+
+    // Caso base
+    if (n < 10) {
+        newpot = 10;    // Potencia usada para la reducción
+        return 9 - n;   // devuelve el caso base; El dígito complementario
+    }
+
+    else {
+        int pot;
+
+        int comPre = complementarioInvertido(n / 10, pot);
+        int comDig = 9 - n % 10;    // Guardamos el complementario del dígito
+
+        newpot = 10 * pot;  // Actualizamos la potencia
+        return pot * comDig + comPre;
+
+    }
 }
 
 // Resuelve un caso de prueba, leyendo de la entrada la
 // configuración, y escribiendo la respuesta
 void resuelveCaso() {
+
     // leer los datos de la entrada
 
-    vector <int> datos;
-    int size, posicion, val;
+    int numero, pot;
+    int size;
 
-    // El caso contiene un entero con el tamaño de los datos (1 n) y otro con la posicion a evaluar(0 n-1)
-    cin >> size;
-    cin >> posicion;
+    cin >> numero;
 
-
-    for (int i = 0; i < size; i++)
-    {
-        cin >> val;
-        datos.push_back(val);
-    }
-
-
-    if (resolver(datos, posicion))
-        cout << "SI" << "\n";
-    else cout << "NO" << "\n";
+    cout << complementario(numero) << " ";
+    cout << complementarioInvertido(numero, pot) << "\n";
     // escribir sol
 
 
