@@ -61,13 +61,15 @@ public:
     // La busqueda es lineal porque los elementos ya están ordenados sin repetición
     // Se recorre una vez completamente el set1
     bool operator<=(const Set<T>& set) const {
+
+        int i = 0, j = 0;
+
         // Caso base, conjunto vacío siemrpe está contenido
         if (empty())
             return true;
-
+        
         else {
-            int i = 0, j = 0;
-            while (i < size() && (size() < set.nelems))
+            while (i < nelems && (j < set.nelems))
             {
                 // Avanzamos el array inferior
                 if ((*(array + i)) > *(set.array + j))
@@ -81,6 +83,10 @@ public:
                     return false;
             }
         }
+
+        if (j >= set.nelems && i < nelems)
+            return false;
+
         return true;
     }
 
