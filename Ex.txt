@@ -1,0 +1,35 @@
+//[15:24, 19/11/2021] Nuria GDV: c++
+
+bool esOrdenado(... t){
+	if(t.empty())
+		return true;
+	
+	// el arbol binario hoja tambien es true pero sobra como caso base
+	// denota falta de confianza
+
+	bool esIz = esOrdenado(t.left());
+	bool esDr = esOrdenado(t.right());
+
+	bool mayorQueIz = todosMayores(t.left(), t.root());
+	bool menorQueDr = todosMayores(t.right(), t.root());
+
+	return esIz && esDr && mayorQueIz && menorQueDr;
+}
+
+
+bool esOrdenado(... t, int& min, int& max){
+	if(t.empty())		
+        min = INT_MAX;
+        max = INT_MIN;
+		return true;
+	
+	// el arbol binario hoja tambien es true pero sobra como caso base
+	// denota falta de confianza
+	int minIz, maxDr, minDr, maxIz;
+	bool esIz = esOrdenado(t.left(), minIz, maxIz);
+	bool esDr = esOrdenado(t.right(), minDr, maxDr);
+
+	min = std::min(minIz,t.root());
+	max = std::max(maxIz,t.root()):
+	return esIz && esDr && t.root() > maxIz && t.root() < minDr;
+}
