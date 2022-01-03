@@ -7,33 +7,54 @@
 #include <vector>
 using namespace std;
 
+struct Solucion {
+    int artistas;
+    int ganancias = -1;
+    int maxGanancias = -1;
+    vector<vector<int>> beneficios;
+    vector<vector<bool>> consentimientos;
+
+    Solucion(int n) :
+    beneficios(vector<vector<int>>(n)),
+    consentimientos(vector<vector<bool>>(n)),
+    artistas(n) {}
+};
+
 
 // función que resuelve el problema
 // n es numero de artistas
-int resolver(vector<vector<int>>& beneficios, vector<vector<bool>>& consentimientos, int artist, int val, const int& size, int maxval) {
+//int resolver(vector<vector<int>>& beneficios, vector<vector<bool>>& consentimientos, int artist, int val, const int& size, int maxval) {
+int resolver(Solucion& sol, int k) {
 
-    // Condicion final
-    if (artist >= 2) {
-        if (val > maxval)   
-            maxval = val;
-        return maxval;
-    }
-    else
+    //// Condicion final
+    //if (artist >= 2) {
+    //    if (val > maxval)   
+    //        maxval = val;
+    //    return maxval;
+    //}
+    //else
+    //{
+    //    // una ejecucion por cada artista
+    //    for (int i = 0; i < size; i++)
+    //    {
+    //        // Comprobamos si el artista puede tocar despues de artista I
+    //        if (consentimientos[artist][i]) {
+    //            // Llamada recursiva y sumamos el dinero
+    //            resolver(beneficios, consentimientos, artist + 1, val + beneficios[artist][i], size, maxval);
+    //        }
+
+    //        // De lo contrario continuamos con el siguiente artista
+    //    }
+    //}
+
+    for (int i = 0; i < sol.artistas; i++)
     {
-        // una ejecucion por cada artista
-        for (int i = 0; i < size; i++)
-        {
-            // Comprobamos si el artista puede tocar despues de artista I
-            if (consentimientos[artist][i]) {
-                // Llamada recursiva y sumamos el dinero
-                resolver(beneficios, consentimientos, artist + 1, val + beneficios[artist][i], size, maxval);
-            }
+        sol.consentimientos[k,i] = true;
 
-            // De lo contrario continuamos con el siguiente artista
-        }
     }
 
-    return maxval;
+
+    //return maxval;
 }
 
 
@@ -60,11 +81,12 @@ void resuelveCaso() {
             consentimientos[i][j] = b;
         }
 
+    Solucion sol(n);
     // index 0 inicia la cuenta del algoritmo
-    int val = resolver(beneficios, consentimientos, 0, 0, n, 0);
+    //int val = resolver(beneficios, consentimientos, 0, 0, n, 0);
 
-    if (val > 0)    std::cout << val << "\n";
-    else            std::cout << "NEGOCIA CON LOS ARTISTAS" << "\n";
+   /* if (val > 0)    std::cout << val << "\n";
+    else            std::cout << "NEGOCIA CON LOS ARTISTAS" << "\n";*/
 
 }
 
