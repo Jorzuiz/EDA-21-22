@@ -26,38 +26,35 @@ struct Solucion {
 //int resolver(vector<vector<int>>& beneficios, vector<vector<bool>>& consentimientos, int artist, int val, const int& size, int maxval) {
 int resolver(Solucion& sol, int k) {
 
-    //// Condicion final
-    //if (artist >= 2) {
-    //    if (val > maxval)   
-    //        maxval = val;
-    //    return maxval;
-    //}
-    //else
-    //{
-    //    // una ejecucion por cada artista
-    //    for (int i = 0; i < size; i++)
-    //    {
-    //        // Comprobamos si el artista puede tocar despues de artista I
-    //        if (consentimientos[artist][i]) {
-    //            // Llamada recursiva y sumamos el dinero
-    //            resolver(beneficios, consentimientos, artist + 1, val + beneficios[artist][i], size, maxval);
-    //        }
+    // vector<int>& soluc, int k, int n, int ingresos, int& mejoresIngresos, vector<bool>& elegidos,
+    // const vector<vector<int>>&beneficios, const vector<vector<bool>>& consentimientos, const vector <int> mejoresBeneficios 
 
-    //        // De lo contrario continuamos con el siguiente artista
-    //    }
-    //}
-
-    for (int i = 0; i < sol.artistas; i++)
+    int n = 0;
+    for (int i = 0; i < n; i++)
     {
-        sol.consentimientos[k,i] = true;
-
+        soluc[k] = i;
+        if(esvalida(soluc,k,elegidos,consentimientos)){
+            ingresos+= beneficios[i][k];
+            elegidos[i] = true;
+            if(k == n-1){
+                if(ingresos > mejoresIngresos) mejoresIngesos = ingresos;
+            }else{
+                resolver(sol, k+1);
+            }
+            ingresos -= beneficios[i][k];
+            elegidos[i] = false;
+        }
     }
+    
 
 
     //return maxval;
 }
 
-
+bool esvalida(const vector<int>& soluc, int k, const vector<int> elegidos, const vector<vector<bool>>& consentimientos)
+{
+    return (!elegidos[soluc[k]] && (k==0 || consentimientos[soluc[k]][soluc[k-1]]));
+    }
 
 
 void resuelveCaso() {
@@ -81,13 +78,35 @@ void resuelveCaso() {
             consentimientos[i][j] = b;
         }
 
-    Solucion sol(n);
-    // index 0 inicia la cuenta del algoritmo
-    //int val = resolver(beneficios, consentimientos, 0, 0, n, 0);
+    // Recorre filas y columnas de beneficios 
+    // buscando el maximo income posible
+    vector<int> maxBenefs(n);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if(beneficios[i][j]>maxBenefs[i]) 
+            maxBenefs[i]==beneficios[i][j];
+        }
+    }
+    
+    // Calcula el maximo beneficio posible restante en cada columna
+    vector<int> maxBenefsDesde(n);
+    maxBenefsDesde[n-1] = maxBenefs[n-1];
+    for (int i = n-2; i >= 0; i--)
+    {
+        maxBenefsDesde[i] += maxBenefsDesde[i+1];
+    }
 
-   /* if (val > 0)    std::cout << val << "\n";
-    else            std::cout << "NEGOCIA CON LOS ARTISTAS" << "\n";*/
 
+    vector<int> soluc(n);
+    int k = 0;
+    int ingresos = 0;
+    int mejoresIngresos =-1;
+    vector<bool> elegidos(n);
+    //resolver(soluc, k, n, ingteos, mejoresIngresos, elegidos, beneficios, consentimientos,mejoresBeneficios);
+    if(mejoresIngresos == -1) cout << "NEGOCIA CON LOS ARTISTAS\n";
+    else cout << mejoresIngresos << endl;
 }
 
 

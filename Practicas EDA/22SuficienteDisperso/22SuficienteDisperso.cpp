@@ -4,23 +4,26 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <cstdlib>
 #include <vector>
 
 using namespace std;
 
-// función que resuelve el problema
+// Función que resuelve el problema
+// Dispersion es el valor minimo que tiene que separar a dos valores
 bool suficiente_disperso(vector <int> & datos, int dispersion, int ini, int fin) {
 
     // Caso Base. Diferencia del primer y último valor mayor o igual a K
-    if (fin - ini == 1) {
+    if (fin - ini < 1)  return true;
+    if (fin - ini <= 1) {
         if (abs(datos[ini] - datos[fin]) >= dispersion)
             return true;
         else return false;
     }
 
-    bool half = suficiente_disperso(datos, dispersion, ini, fin / 2);
-    bool second_half = suficiente_disperso(datos, dispersion, fin / 2 + 1, fin);
+    // Llamadas recursivas a las mitades
+    int mid = (ini + fin) / 2;
+    bool half = suficiente_disperso(datos, dispersion, ini, mid);
+    bool second_half = suficiente_disperso(datos, dispersion, mid + 1, fin);
 
     return half && second_half;
 }
@@ -33,25 +36,24 @@ bool resuelveCaso() {
     vector <int> datos;
     int dispersion, size, aux;
 
-    cin >> size;
+    cin >> size >> dispersion;        // Tamaño del caso
 
-    if (!std::cin)
+    if (!std::cin)      // Comprobante de error
         return false;
 
-    cin >> dispersion;
+    //cin >> dispersion;              // Parámetro k de dispersión
     for (int i = 0; i < size; i++)
     {
         cin >> aux;
         datos.push_back(aux);
-
     }
 
 
     if (suficiente_disperso(datos, dispersion, 0, size-1))
         // escribir sol
-        cout << "SI" << "\n";
+        cout << "SI\n";
     else 
-        cout << "NO" << "\n";
+        cout << "NO\n";
 
     return true;
 
