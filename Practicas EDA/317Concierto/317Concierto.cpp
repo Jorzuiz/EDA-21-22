@@ -20,26 +20,29 @@ struct Solucion {
     artistas(n) {}
 };
 
+bool esValida(const vector<int>& soluc, int k, const vector<bool>& elegidos, const vector<vector<bool>>& consentimientos)
+{
+    return (!elegidos[soluc[k]] && (k == 0 || consentimientos[soluc[k]][soluc[k - 1]]));
+}
 
 // función que resuelve el problema
 // n es numero de artistas
 //int resolver(vector<vector<int>>& beneficios, vector<vector<bool>>& consentimientos, int artist, int val, const int& size, int maxval) {
-int resolver(Solucion& sol, int k) {
+void resolver(vector<int>& soluc, int k, int n, int ingresos, int& mejoresIngresos, vector<bool>& elegidos,
+    const vector<vector<int>>&beneficios, const vector<vector<bool>>& consentimientos, const vector <int> mejoresBeneficiosDesde){
 
-    // vector<int>& soluc, int k, int n, int ingresos, int& mejoresIngresos, vector<bool>& elegidos,
-    // const vector<vector<int>>&beneficios, const vector<vector<bool>>& consentimientos, const vector <int> mejoresBeneficios 
 
-    int n = 0;
     for (int i = 0; i < n; i++)
     {
         soluc[k] = i;
-        if(esvalida(soluc,k,elegidos,consentimientos)){
+        if(esValida(soluc, k, elegidos, consentimientos)){
             ingresos+= beneficios[i][k];
             elegidos[i] = true;
             if(k == n-1){
-                if(ingresos > mejoresIngresos) mejoresIngesos = ingresos;
+                if(ingresos > mejoresIngresos) mejoresIngresos = ingresos;
             }else{
-                resolver(sol, k+1);
+                if (ingresos + mejoresBeneficiosDesde[k+1] > mejoresIngresos)
+                resolver(soluc, k+1, n, ingresos, mejoresIngresos, elegidos, beneficios, consentimientos, mejoresBeneficiosDesde);
             }
             ingresos -= beneficios[i][k];
             elegidos[i] = false;
@@ -51,10 +54,6 @@ int resolver(Solucion& sol, int k) {
     //return maxval;
 }
 
-bool esvalida(const vector<int>& soluc, int k, const vector<int> elegidos, const vector<vector<bool>>& consentimientos)
-{
-    return (!elegidos[soluc[k]] && (k==0 || consentimientos[soluc[k]][soluc[k-1]]));
-    }
 
 
 void resuelveCaso() {
@@ -86,7 +85,7 @@ void resuelveCaso() {
         for (int j = 0; j < n; j++)
         {
             if(beneficios[i][j]>maxBenefs[i]) 
-            maxBenefs[i]==beneficios[i][j];
+            maxBenefs[i]=beneficios[i][j];
         }
     }
     
