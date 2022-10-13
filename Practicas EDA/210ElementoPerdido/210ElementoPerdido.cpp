@@ -9,9 +9,9 @@
 
 using namespace std;
 
-// función que resuelve el problema
-// Un algoritmo de busqueda que recorrre el vector discriminando las mitades que no contienen el elemento
-// COSTE: log N siendo N el tamaño del vector dada que una mitad siempre se quedará sin procesar
+// Función que resuelve el problema
+// Un algoritmo de busqueda que recorre el vector discriminando las mitades que no contienen el elemento
+// COSTE: log (N) siendo N el tamaño del vector dada que una mitad siempre se quedará sin procesar
 int resolver(vector <int> datos1, vector <int> datos2, int ini, int fin) {
     
     // Caso base de tamaño 2 devolvemos el diferente de los 2 que no está en el vector 2
