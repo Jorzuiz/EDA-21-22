@@ -49,6 +49,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "16Rescate", "16Rescate\16Re
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "406MenoresSet", "406MenoresSet\406MenoresSet.vcxproj", "{DA38D76F-2DBE-4BF5-8C83-C6E2A6CB9E7E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "505ColaPepsiCola", "505ColaPepsiCola\505ColaPepsiCola.vcxproj", "{51C392F9-20F7-470F-8372-A72CFD5C86CD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "506DuplicarElementos", "506DuplicarElementos\506DuplicarElementos.vcxproj", "{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -241,6 +245,22 @@ Global
 		{DA38D76F-2DBE-4BF5-8C83-C6E2A6CB9E7E}.Release|x64.Build.0 = Release|x64
 		{DA38D76F-2DBE-4BF5-8C83-C6E2A6CB9E7E}.Release|x86.ActiveCfg = Release|Win32
 		{DA38D76F-2DBE-4BF5-8C83-C6E2A6CB9E7E}.Release|x86.Build.0 = Release|Win32
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Debug|x64.ActiveCfg = Debug|x64
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Debug|x64.Build.0 = Debug|x64
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Debug|x86.ActiveCfg = Debug|Win32
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Debug|x86.Build.0 = Debug|Win32
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Release|x64.ActiveCfg = Release|x64
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Release|x64.Build.0 = Release|x64
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Release|x86.ActiveCfg = Release|Win32
+		{51C392F9-20F7-470F-8372-A72CFD5C86CD}.Release|x86.Build.0 = Release|Win32
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Debug|x64.ActiveCfg = Debug|x64
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Debug|x64.Build.0 = Debug|x64
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Debug|x86.ActiveCfg = Debug|Win32
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Debug|x86.Build.0 = Debug|Win32
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Release|x64.ActiveCfg = Release|x64
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Release|x64.Build.0 = Release|x64
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Release|x86.ActiveCfg = Release|Win32
+		{CEFC275A-BDE6-40A8-99D4-47A86A0BFE00}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
