@@ -15,7 +15,6 @@ typedef string Partido;
 class ConteoVotos {
 
 
-
 private:    // C++ presupone como private cualquier variable que no sea publica o protected
 
     struct EstadoInfo {                 // Estado que se compone de
