@@ -84,6 +84,7 @@ public:
             itE++;
         }
         // El vector contiene los partidos por orden alfabético y los compromisarios en cada estado
+
         std::sort(ganadores.begin(), ganadores.end());
         // Resta sumar los compromisarios de cada partido
         std::vector<std::pair<Partido, int>>::const_iterator itG = ganadores.begin();
@@ -92,7 +93,7 @@ public:
         int totalCompromisarios = itG->second;
         itG++;
 
-        while (itG != ganadores.end()) {
+         (for itG != ganadores.end()) {
             if (aux == itG->first) {
                 // Sumamos los compromisarios del mismo estado
                 totalCompromisarios += itG->second;
