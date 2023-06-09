@@ -12,12 +12,14 @@ class carnet_puntos {
 
 private:
     std::map<std::string, int> base;
+    int aPuntos[16]; // Cuenta cuantas personas tienen N puntos; las posiciones son los puntos
 
 public:
     void nuevo(const std::string& dni) {
         //std::unordered_map<std::string, int>::iterator it = base.find(dni);
         auto it = base.find(dni);
         if (it != base.end()) throw std::domain_error("Conductor duplicado");
+        aPuntos[15]++;
         base.insert({ dni, 15 });
     }
 
@@ -25,8 +27,10 @@ public:
         //std::unordered_map<std::string, int>::iterator it = base.find(dni);
         auto it = base.find(dni);
         if (it == base.end()) throw std::domain_error("Conductor inexistente");
+        aPuntos[it->second]--;
         it->second -= puntos;
-        if (it->second < 0) it->second = 0; 
+        if (it->second < 0) it->second = 0;
+        aPuntos[it->second]++;
     }
 
     int consultar(const std::string& dni) {
@@ -38,14 +42,7 @@ public:
     
     int cuantos_con_puntos(const int& puntos) {
         if (puntos < 0 || puntos >15) throw std::domain_error("Puntos no validos");
-
-        int total=0;
-        //std::unordered_map<std::string, int>::iterator it = base.begin();
-        auto it = base.begin();
-        for (const auto& it : base) {
-            if (it.second == puntos) total++;
-        }
-        return total;
+        return aPuntos[puntos];
     }
 };
 

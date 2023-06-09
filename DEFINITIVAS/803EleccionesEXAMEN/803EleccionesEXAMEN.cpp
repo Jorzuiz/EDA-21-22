@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <unordered_map>
 
 #include <exception>
@@ -23,63 +24,74 @@ private:
 
     struct infoEstado {  // Cada valor de estado tiene la info de los compromisarios y un mapa con los partidos
         int compromisarios;
-        //std::unordered_map<std::string, infoPartido> partidos;
+        std::string partidoMax;
+        int votosMax;
+
         Partidos partidos;
     };
 
+    // Se necesitan metodos para actualizar los numeros de compromisarios por partido
+    std::map<Partido, int> compromisarios;
     using Estados = std::unordered_map<Estado, infoEstado>;
-    //std::unordered_map<Estado, infoEstado> estados; // Mapa de los estados
-    Estados estados;
+    Estados mEstados;
 
     // La estructura queda tal que <NombreEstado, <compromisarios, <partido, votos>>>
 public:
 
-    // Insert del estado
     void nuevo_estado(const Estado& nombre, int num_compromisarios) {
-        Estados::iterator it = estados.find(nombre);
-        if (it == estados.end()) {
+        Estados::iterator it = mEstados.find(nombre);
+        if (it == mEstados.end()) {
             infoEstado infE;
             infE.compromisarios = num_compromisarios;
-            estados.insert({ nombre, infE });
+            mEstados.insert({ nombre, infE });
         }
         else throw std::domain_error("Estado ya existente");
     }
 
-    void sumar_votos(const Estado& estado, const Partido& partido, int num_votos) {
-        Estados::iterator itE = estados.find(estado);
-        if (itE != estados.end()) {
-            std::unordered_map<std::string, int>::iterator itP = itE->second.partidos.find(partido);
+    void updateCompromisarios(Partido partido1, Partido partido2, int _compromisarios){
+        auto it = compromisarios.find(partido1);
+        if (it != compromisarios.end()) compromisarios.at(partido1) -= _compromisarios;
+        
+        it = compromisarios.find(partido2);
+        if (it != compromisarios.end()) compromisarios.at(partido2) += _compromisarios;
+        else compromisarios.insert({ partido2, _compromisarios });
+        return;
+    }
 
-            // Si el partido existe le suma los votos, de lo contrario lo crea
-            if (itP != itE->second.partidos.end()) itP->second += num_votos;
-            else itE->second.partidos.insert({ partido, num_votos });
+    // Actualiza el partido más votado del estado si procede
+    void updateMax(Estados::iterator& estado, Partidos::iterator& partido) {
+        // partido->first == string         partido->second == votos
+        if (partido->second > estado->second.votosMax) {
+            updateCompromisarios(estado->second.partidoMax, partido->first, estado->second.compromisarios);
+            estado->second.partidoMax = partido->first;
+            estado->second.votosMax = partido->second;
         }
-        else throw std::domain_error("Estado no encontrado");
+    }
+
+    void sumar_votos(const Estado& estado, const Partido& partido, int num_votos) {
+
+        Estados::iterator itE = mEstados.find(estado);
+        if (itE == mEstados.end()) throw std::domain_error("Estado no encontrado");
+
+        std::unordered_map<std::string, int>::iterator itP = itE->second.partidos.find(partido);
+        // Si el partido existe le suma los votos, de lo contrario lo crea
+        if (itP != itE->second.partidos.end()) itP->second += num_votos;
+        // El insert devuelve un pair con informacion del iterador donde se guarda y un bool que dice si ha sido exitoso
+        else itP = itE->second.partidos.insert({ partido, num_votos }).first;
+        updateMax(itE, itP);
     }
 
     Partido ganador_en(const Estado& estado) const {
-        Partido ganador;
-        Estados::const_iterator itE = estados.find(estado);
-        if (itE != estados.end()) {
-            int maxVotos = 0;
-            Partidos::const_iterator itP = itE->second.partidos.begin();
-            while (itP != itE->second.partidos.end()) {
-                if (itP->second > maxVotos) {
-                    maxVotos = itP->second;
-                    ganador = itP->first;
-                }
-                itP++;
-            }
-
-        }
-        else throw std::domain_error("Estado no encontrado");
-        return ganador;
+        Estados::const_iterator itE = mEstados.find(estado);
+        if (itE == mEstados.end())  throw std::domain_error("Estado no encontrado");
+        return itE->second.partidoMax;
     }
 
     std::vector<std::pair<Partido, int>> resultados() const {
+
         std::vector<std::pair<Partido, int>> ganadores;
-        Estados::const_iterator itE = estados.begin();
-        while (itE != estados.end()) {
+        Estados::const_iterator itE = mEstados.begin();
+        while (itE != mEstados.end()) {
             ganadores.push_back(make_pair(ganador_en(itE->first), itE->second.compromisarios));
             itE++;
         }
@@ -93,7 +105,7 @@ public:
         int totalCompromisarios = itG->second;
         itG++;
 
-         (for itG != ganadores.end()) {
+        while (itG != ganadores.end()) {
             if (aux == itG->first) {
                 // Sumamos los compromisarios del mismo estado
                 totalCompromisarios += itG->second;
@@ -106,7 +118,10 @@ public:
             }
             itG++;
         }
-        totales.push_back(make_pair(aux, totalCompromisarios));
+
+        auto it = compromisarios.begin();
+        for(const &auto it : compromisarios)
+            totales.push_back(make_pair(aux, totalCompromisarios));
 
         return totales;
     }
