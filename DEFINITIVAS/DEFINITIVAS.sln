@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "806CarnetPuntos2", "806Cane
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "807Ipud", "807Ipud\807Ipud.vcxproj", "{1FBBDC7D-AE0C-4096-AD1C-B4F9900556C6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "312ConciertoEXAMEN", "312ConciertoEXAMEN\312ConciertoEXAMEN.vcxproj", "{DED3E3C9-5695-4D26-9EB6-4AF315991579}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{1FBBDC7D-AE0C-4096-AD1C-B4F9900556C6}.Release|x64.Build.0 = Release|x64
 		{1FBBDC7D-AE0C-4096-AD1C-B4F9900556C6}.Release|x86.ActiveCfg = Release|Win32
 		{1FBBDC7D-AE0C-4096-AD1C-B4F9900556C6}.Release|x86.Build.0 = Release|Win32
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Debug|x64.ActiveCfg = Debug|x64
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Debug|x64.Build.0 = Debug|x64
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Debug|x86.ActiveCfg = Debug|Win32
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Debug|x86.Build.0 = Debug|Win32
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Release|x64.ActiveCfg = Release|x64
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Release|x64.Build.0 = Release|x64
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Release|x86.ActiveCfg = Release|Win32
+		{DED3E3C9-5695-4D26-9EB6-4AF315991579}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
