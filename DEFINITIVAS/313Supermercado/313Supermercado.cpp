@@ -24,31 +24,37 @@ void calculaOptimista(int n, int m, vector<vector<int>>& precio, vector<int>& op
 
 void calculaHasta(vector<int>& optimista, vector<int>& optimistaHasta) {
 
-    optimistaHasta[0] = optimista[0];
-    for (int i = 1; i < optimista.size(); i++)
+    //optimistaHasta[0] = optimista[0];
+    optimistaHasta[optimista.size() - 1] = optimista[optimista.size()-1];
+    //for (int i = 1; i < optimista.size(); i++)
+    for (int i = optimista.size()-2; i >= 0; i--)
     {
-        optimistaHasta[i] = optimista[i] + optimistaHasta[i - 1];
+        //optimistaHasta[i] = optimista[i] + optimistaHasta[i - 1];
+        optimistaHasta[i] = optimista[i] + optimistaHasta[i + 1];
     }
     return;
 }
 
 // K profundidad, N productos, M supermercados
-void resolver(vector<int>& soluc, int k, int n, int m, vector<vector<int>>& precios, int current, int& mejorgasto, vector<int>& compras) {
+void resolver(vector<int>& soluc, int k, int n, int m, vector<vector<int>>& precios, int current, int& mejorgasto, vector<int>& compras, vector<int>& optimistaHasta) {
 
     // Siendo k el producto actual a elegir
     for (int j = 0; j < m; j++) {       // Genera cada posible compra en supermercado
         if (compras[j] < 3 && k < n) {  // Si puede comprar en el supermercado
-            
+
             soluc[k] = precios[j][k];   // Para comprobar en debug luego
             current += precios[j][k];
             compras[j]++;               // Marcaje; Compras realizadas en el supermercado j
-            
+
             if (k == n - 1) {
-                mejorgasto = min(mejorgasto, current);  // Trata el final de la solución
-                
+                mejorgasto = min(mejorgasto, current);  // Trata el final de la solución                
             }
- 
-            resolver(soluc, k + 1, n, m, precios, current, mejorgasto, compras);
+            // Poda valores si no van a ser mejores que la solución actual
+            else {
+                //if (current + optimistaHasta[k] < mejorgasto) {
+                    resolver(soluc, k + 1, n, m, precios, current, mejorgasto, compras, optimistaHasta);
+                //}
+            }
             compras[j]--;
             current -= precios[j][k];
         }
@@ -74,9 +80,11 @@ void resuelveCaso() {
             cin >> precios[i][j];
         }
     }
-    calculaOptimista(n,m,precios, optimista);
-    calculaHasta(optimista, optimistaHasta);
-    resolver(soluc, 0, n, m, precios, 0, mejorGasto, compras);
+    
+    calculaOptimista(n,m,precios, optimista);   // Vector con los minimos valores de cada producto
+    calculaHasta(optimista, optimistaHasta);    // Cola de la compra con los minimos valores posibles acumulados
+
+    resolver(soluc, 0, n, m, precios, 0, mejorGasto, compras, optimistaHasta);
     cout << mejorGasto << endl;
 }
 
