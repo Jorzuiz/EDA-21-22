@@ -34,33 +34,34 @@ private:
     std::map<Partido, int> compromisarios;
     using Estados = std::unordered_map<Estado, infoEstado>;
     Estados mEstados;
-
-    // La estructura queda tal que <NombreEstado, <compromisarios, <partido, votos>>>
+    // La estructura queda tal que <NombreEstado, <(compromisarios, partidoMax, votosMax), <partido, votos>>>
 public:
 
     void nuevo_estado(const Estado& nombre, int num_compromisarios) {
+        
         Estados::iterator it = mEstados.find(nombre);
-        if (it == mEstados.end()) {
-            infoEstado infE;
-            infE.compromisarios = num_compromisarios;
-            mEstados.insert({ nombre, infE });
-        }
-        else throw std::domain_error("Estado ya existente");
+        if (it != mEstados.end()) throw std::domain_error("Estado ya existente");
+        
+        infoEstado infE;
+        infE.compromisarios = num_compromisarios;
+        mEstados.insert({ nombre, infE });
     }
 
+    // Un mapa auxiliar ordena y almacena una lista de partidos y los compromisarios que tienen en cada momento
+    // No contiene infomación de los estados
     void updateCompromisarios(Partido partido1, Partido partido2, int _compromisarios){
         auto it = compromisarios.find(partido1);
-        if (it != compromisarios.end()) compromisarios.at(partido1) -= _compromisarios;
+        if (it != compromisarios.end()) it->second -= _compromisarios;
         
         it = compromisarios.find(partido2);
-        if (it != compromisarios.end()) compromisarios.at(partido2) += _compromisarios;
+        if (it != compromisarios.end()) it->second += _compromisarios;
         else compromisarios.insert({ partido2, _compromisarios });
-        return;
     }
 
-    // Actualiza el partido más votado del estado si procede
+    // El estado guarda información de cual es el partido con más votos en todo momento
+    // Aprovecha la búsqueda del partido cuando se realiza una suma para no realizar otra busqueda más adelante
     void updateMax(Estados::iterator& estado, Partidos::iterator& partido) {
-        // partido->first == string         partido->second == votos
+        // partido->first == string partido         partido->second == int votos
         if (partido->second > estado->second.votosMax) {
             updateCompromisarios(estado->second.partidoMax, partido->first, estado->second.compromisarios);
             estado->second.partidoMax = partido->first;
@@ -68,6 +69,8 @@ public:
         }
     }
 
+    // Al sumar los votos se actualizan los contadores de partidos ganadores en los estados
+    // y de compromisarios de cada partido
     void sumar_votos(const Estado& estado, const Partido& partido, int num_votos) {
 
         Estados::iterator itE = mEstados.find(estado);
@@ -90,44 +93,15 @@ public:
     std::vector<std::pair<Partido, int>> resultados() const {
 
         std::vector<std::pair<Partido, int>> ganadores;
-        Estados::const_iterator itE = mEstados.begin();
-        while (itE != mEstados.end()) {
-            ganadores.push_back(make_pair(ganador_en(itE->first), itE->second.compromisarios));
-            itE++;
-        }
-        // El vector contiene los partidos por orden alfabético y los compromisarios en cada estado
+        // Al ser un mapa (BST) se ordena por el primer elemento, en este caso el string (alfabéticamente)
+        // Solo tenemos que comprobar que los compromisarios sean mayores que 0
+        for(auto &it : compromisarios)  // El iterador por referencia evita copiar el mapa
+            if (it.second > 0)
+            ganadores.push_back(make_pair(it.first, it.second));
 
-        std::sort(ganadores.begin(), ganadores.end());
-        // Resta sumar los compromisarios de cada partido
-        std::vector<std::pair<Partido, int>>::const_iterator itG = ganadores.begin();
-        std::vector<std::pair<Partido, int>> totales;
-        Partido aux = itG->first;
-        int totalCompromisarios = itG->second;
-        itG++;
-
-        while (itG != ganadores.end()) {
-            if (aux == itG->first) {
-                // Sumamos los compromisarios del mismo estado
-                totalCompromisarios += itG->second;
-            }
-            else {
-                // Cargamos y actualizamos al estado siguiente
-                totales.push_back(make_pair(aux, totalCompromisarios));
-                aux = itG->first;
-                totalCompromisarios = itG->second;
-            }
-            itG++;
-        }
-
-        auto it = compromisarios.begin();
-        for(const &auto it : compromisarios)
-            totales.push_back(make_pair(aux, totalCompromisarios));
-
-        return totales;
+        return ganadores;
     }
-
 };
-
 
 bool resuelveCaso() {
     std::string comando;

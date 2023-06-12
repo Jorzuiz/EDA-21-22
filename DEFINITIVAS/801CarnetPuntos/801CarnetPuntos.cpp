@@ -16,32 +16,33 @@ private:
 
 public:
     void nuevo(const std::string& dni) {
-        //std::unordered_map<std::string, int>::iterator it = base.find(dni);
         auto it = base.find(dni);
         if (it != base.end()) throw std::domain_error("Conductor duplicado");
+
         aPuntos[15]++;
         base.insert({ dni, 15 });
     }
 
     void quitar(const std::string& dni, const int& puntos) {
-        //std::unordered_map<std::string, int>::iterator it = base.find(dni);
         auto it = base.find(dni);
         if (it == base.end()) throw std::domain_error("Conductor inexistente");
-        aPuntos[it->second]--;
+
+        aPuntos[it->second]--;  // Elimina el conteo de sus puntos actuales
         it->second -= puntos;
         if (it->second < 0) it->second = 0;
-        aPuntos[it->second]++;
+        aPuntos[it->second]++;  // Lo añade al conteo de sus nuevos puntos
     }
 
     int consultar(const std::string& dni) {
-        //std::unordered_map<std::string, int>::iterator it = base.find(dni);
         auto it = base.find(dni);
-        if (it != base.end()) return it->second;
-        else throw std::domain_error("Conductor inexistente");
+        if (it == base.end())   throw std::domain_error("Conductor inexistente");
+        
+        return it->second;
     }
     
     int cuantos_con_puntos(const int& puntos) {
         if (puntos < 0 || puntos >15) throw std::domain_error("Puntos no validos");
+        
         return aPuntos[puntos];
     }
 };
