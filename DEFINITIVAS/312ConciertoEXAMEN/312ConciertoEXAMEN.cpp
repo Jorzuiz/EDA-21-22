@@ -17,22 +17,40 @@ bool esSolucion(vector<vector<bool>>& consentimientos, vector<vector<bool>>& mar
 bool poda(vector<vector<int>> &beneficios, vector<vector<int>> &consentimientos){}
 
 // función que resuelve el problema
-// k es le nivel actual de recorrido, n es el nivel máximo
-// El marcaje es la solucion actual que va evolucionando sobre beneficios
-void resolver(int k, int n, vector<vector<int>> &beneficios, vector<vector<bool>> &consentimientos, vector<vector<bool>> &marcaje) {
-    // artista i, consentimiento j
-    int i, int j;
-    while (k != n)
-        // prueba solucion
-        if (esSolucion(consentimientos, marcaje))
-        for (i = k; i < n; i++) {
-            if (esSolucion(consentimientos)) return;
+/*vueltaAtrasConMarcaje(Tupla& sol, int k, Marca& marcas) {
+    prepararRecorridoNivel(k);
+    while (!ultimoHijoNivel(k)) {
+        sol[k] = siguienteHijoNivel(k);
+        if (esValida(sol, k, marcas)) {
+            if (esSolucion(sol, k))
+                tratarSolucion(sol);
             else {
-                marcaje[i][j] = true;
-                resolver(k + 1, n, beneficios, consentimientos, marcaje);
-                marcaje[i][j] = false;
+                marcar(marcas, sol, k);
+                vueltaAtrasConMarcaje(sol, k + 1, marcas);
+                desmarcar(marcas, sol, k);
             }
         }
+    }
+}*/
+// k es le nivel actual de recorrido, n es el nivel máximo
+// El marcaje es la solucion actual que va evolucionando sobre beneficios
+int resolver(int k, int n, int beneficioMax, int beneficioActual, vector<vector<int>>& beneficios, vector<vector<bool>>& consentimientos, vector<vector<bool>>& marcaje) {
+    // artista i, consentimiento j
+    int i, int j = k;
+    for (i = k; i < n-1; i++)
+        marcaje[i][j] = true;
+        beneficioActual += beneficios[i][j];
+
+        if (consentimientos[i][j] = marcaje[i][j]) { // Admite tocar despues de
+            if (k = n)    // Final del recorrido 
+                return max(beneficioMax, beneficioActual);
+            else {
+                resolver(k + 1, beneficios, consentimientos, marcaje);
+            }
+        }
+        marcaje[i][j] = false;
+        beneficioActual -= beneficios[i][j];
+
 }
 
 // Resuelve un caso de prueba, leyendo de la entrada la
