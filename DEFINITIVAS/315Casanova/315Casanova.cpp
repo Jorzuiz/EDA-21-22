@@ -21,40 +21,49 @@ void densidad(vector<Cancion> &canciones, vector<int> &den){
     return;
 }
 
-void resolver(int k, int n, int duracion, int cara, vector<int>& soluc, int pActuales, int dActuales, vector<Cancion>& canciones, int &maxPuntos) {
+void resolver(int k, int n, int duracion, vector<int>& soluc, int pActuales, int dActuales, int pBctuales, int dBctuales, vector<Cancion>& canciones, int& maxPuntos) {
 
-    // Añade la cancion a la cara solo si no está en una cara
-    if (soluc[k] == 0) {
-        // Marcado de solucion
-        soluc[k] = cara;
-        pActuales += canciones[k].puntos;
-        dActuales += canciones[k].duracion;
-        if (dActuales <= duracion) {               // Esvalida
-            if (k == n-1) {    // Es solucion
-                maxPuntos = max(maxPuntos, pActuales);  // Trata solucion
-            }
-            // Posible poda aqui
-            // if (current + optimista[k] < maxPuntos)
-            else resolver(k + 1, n, duracion, cara, soluc, pActuales, dActuales, canciones, maxPuntos);
-        }
-        pActuales -= canciones[k].puntos;
-        dActuales -= canciones[k].duracion;
-    }
 
-    // Si la canción ya está en la otra cara o se ha desmaracado
-    else {
-        soluc[k] = 0;
+    // Marcado de cara 1
+    soluc[k] = 1;
+    pActuales += canciones[k].puntos;
+    dActuales += canciones[k].duracion;
+    if (dActuales <= duracion) {               // Esvalida
         if (k == n - 1) {    // Es solucion
-            maxPuntos = max(maxPuntos, pActuales);  // Trata solucion
+            maxPuntos = max(maxPuntos, pActuales+pBctuales);  // Trata solucion
         }
         // Posible poda aqui
         // if (current + optimista[k] < maxPuntos)
-        else resolver(k + 1, n, duracion, cara, soluc, pActuales, dActuales, canciones, maxPuntos);
+        else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos);
     }
+    pActuales -= canciones[k].puntos;
+    dActuales -= canciones[k].duracion;
+
+    // Marcado de cara 2
+    soluc[k] = 2;
+    pBctuales += canciones[k].puntos;
+    dBctuales += canciones[k].duracion;
+    if (dBctuales <= duracion) {               // Esvalida
+        if (k == n - 1) {    // Es solucion
+            maxPuntos = max(maxPuntos, pActuales + pBctuales);  // Trata solucion
+        }
+        // Posible poda aqui
+        // if (current + optimista[k] < maxPuntos)
+        else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos);
+    }
+    pBctuales -= canciones[k].puntos;
+    dBctuales -= canciones[k].duracion;
+
+    // Solución sin marcado
+    soluc[k] = 0;
+    if (k == n - 1) {    // Es solucion
+        maxPuntos = max(maxPuntos, pActuales+pBctuales);  // Trata solucion
+    }
+    // Posible poda aqui
+    // if (current + optimista[k] < maxPuntos)
+    else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos);
 
 }
-
-void resolverB(int k, int n, int cara, vector<int> soluc, vector<Cancion> canciones, int maxPuntos){}
 
 // Resuelve un caso de prueba, leyendo de la entrada la
 // configuración, y escribiendo la respuesta
@@ -74,12 +83,11 @@ bool resuelveCaso() {
     vector<int> den(n);
     densidad(canciones, den);
 
-    int puntosA=0, puntosB=0;
-    resolver(0, n, duracion, 1, soluc, 0, 0, canciones, puntosA);    // Calcula los maximos puntos posibles en la primera cara
-    resolver(0, n, duracion, 2, soluc, 0, 0, canciones, puntosB);    // Lo mismo apara la segunda
+    int puntos=0;
+    resolver(0, n, duracion, soluc, 0, 0, 0, 0, canciones, puntos);    // Calcula los maximos puntos posibles en la primera cara
 
     // Salida
-    cout << puntosA + puntosB;
+    cout << puntos;
     return true;
 }
 
