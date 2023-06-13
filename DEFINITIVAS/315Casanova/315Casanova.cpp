@@ -13,15 +13,16 @@ struct Cancion {
     int puntos;
 };
 
-void densidad(vector<Cancion> &canciones, vector<int> &den){
-    for (int i = 0; i < canciones.size(); i++)
+void estimacion(vector<Cancion>& canciones, vector<int>& den) {
+    den[canciones.size() - 1] = canciones[canciones.size() - 1].puntos;
+    for (int i = canciones.size() - 2; i >= 0; i--)
     {
-        den[i] = canciones[i].duracion / canciones[i].puntos;
+        den[i] = canciones[i].puntos + den[i + 1];
     }
     return;
 }
 
-void resolver(int k, int n, int duracion, vector<int>& soluc, int pActuales, int dActuales, int pBctuales, int dBctuales, vector<Cancion>& canciones, int& maxPuntos) {
+void resolver(int k, int n, int duracion, vector<int>& soluc, int pActuales, int dActuales, int pBctuales, int dBctuales, vector<Cancion>& canciones, int& maxPuntos, vector<int> & optimista) {
 
 
     // Marcado de cara 1
@@ -33,8 +34,8 @@ void resolver(int k, int n, int duracion, vector<int>& soluc, int pActuales, int
             maxPuntos = max(maxPuntos, pActuales+pBctuales);  // Trata solucion
         }
         // Posible poda aqui
-        // if (current + optimista[k] < maxPuntos)
-        else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos);
+        //else if (pActuales + optimista[k+1] < maxPuntos)
+        else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos, optimista);
     }
     pActuales -= canciones[k].puntos;
     dActuales -= canciones[k].duracion;
@@ -48,8 +49,8 @@ void resolver(int k, int n, int duracion, vector<int>& soluc, int pActuales, int
             maxPuntos = max(maxPuntos, pActuales + pBctuales);  // Trata solucion
         }
         // Posible poda aqui
-        // if (current + optimista[k] < maxPuntos)
-        else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos);
+        //else if (pBctuales + optimista[k+1] < maxPuntos)
+        else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos, optimista);
     }
     pBctuales -= canciones[k].puntos;
     dBctuales -= canciones[k].duracion;
@@ -59,9 +60,7 @@ void resolver(int k, int n, int duracion, vector<int>& soluc, int pActuales, int
     if (k == n - 1) {    // Es solucion
         maxPuntos = max(maxPuntos, pActuales+pBctuales);  // Trata solucion
     }
-    // Posible poda aqui
-    // if (current + optimista[k] < maxPuntos)
-    else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos);
+    else resolver(k + 1, n, duracion, soluc, pActuales, dActuales, pBctuales, dBctuales, canciones, maxPuntos, optimista);
 
 }
 
@@ -81,10 +80,10 @@ bool resuelveCaso() {
     
     // Posible poda por estimación optimmista
     vector<int> den(n);
-    densidad(canciones, den);
+    estimacion(canciones, den);
 
     int puntos=0;
-    resolver(0, n, duracion, soluc, 0, 0, 0, 0, canciones, puntos);    // Calcula los maximos puntos posibles en la primera cara
+    resolver(0, n, duracion, soluc, 0, 0, 0, 0, canciones, puntos, den);    // Calcula los maximos puntos posibles en la primera cara
 
     // Salida
     cout << puntos;

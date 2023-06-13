@@ -51,9 +51,9 @@ void resolver(vector<int>& soluc, int k, int n, int m, vector<vector<int>>& prec
             }
             // Poda valores si no van a ser mejores que la solución actual
             else {
-                //if (current + optimistaHasta[k] < mejorgasto) {
+                if (current + optimistaHasta[k+1] < mejorgasto) {
                     resolver(soluc, k + 1, n, m, precios, current, mejorgasto, compras, optimistaHasta);
-                //}
+                }
             }
             compras[j]--;
             current -= precios[j][k];
