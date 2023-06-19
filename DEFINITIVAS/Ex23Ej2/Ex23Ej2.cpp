@@ -9,69 +9,22 @@
 
 using namespace std;
 
-void resolver(bintree<int> arbol, int& nDragones, int& salida)
+void draconis(const bintree<int> &mazmorra, int & cont, int nDrag, int& mNodo)
 {
     //Si el arbol no esta vacio
-    if (!arbol.empty())
-    {
-        //Comprobamos si estamos en una de las hojas, debido a que son 
-        //las cifras superiores a 2 (1 es dragon, 2 es vacio)
-        if (arbol.root() > 2)
-            salida = arbol.root();
-
-        //Si no lo estamos
-        else
-        {
-            int dragonesIzq = 0;
-            int dragonesDer = 0;
-
-            int nodoIzq = -1;
-            int nodoDer = -1;
-
-            //Continuamos por el lado izquierdo del arbol
-            if (!arbol.left().empty())
-                resolver(arbol.left(), dragonesIzq, nodoIzq);
-
-            //Continuamos por el lado derecho del arbol
-            if (!arbol.right().empty())
-                resolver(arbol.right(), dragonesDer, nodoDer);
-
-            //Si ambas salidas tienen un nodo...
-            if (nodoIzq != -1 && nodoDer != -1)
-            {
-                //Comprobamos si hay menos o igual numero de dragones izquierdos, para
-                //extraer la salida izquierda
-                if (dragonesIzq <= dragonesDer)
-                {
-                    salida = nodoIzq;
-                    nDragones += dragonesIzq;
-                }
-
-                //Si no, lo mismo pero en el lado derecho
-                else
-                {
-                    salida = nodoDer;
-                    nDragones += dragonesDer;
-                }
+    if (!mazmorra.empty()){
+        // Si tenemos una hoja comprobamos los dragones que había en el camino
+        if (mazmorra.left().empty() && mazmorra.right().empty()) {
+            // Si había menos deragones actualizamos
+            if (nDrag < cont) {
+                cont = nDrag;
+                mNodo = mazmorra.root();
             }
-
-            //Si solo hay nodo derecho, devolvemos el lado derecho
-            else if (nodoIzq == -1)
-            {
-                salida = nodoDer;
-                nDragones += dragonesDer;
-            }
-
-            //Si solo hay un nodo izquierdo, devolvemos el lado izquierdo
-            else if (nodoDer == -1)
-            {
-                salida = nodoIzq;
-                nDragones += dragonesIzq;
-            }
-
-            //Si la raiz es 2, hay un dragon 
-            if (arbol.root() == 1)
-                nDragones++;
+        }
+        else {  // Si no tenenmos una hoja solo nos queda explorar  habiendo contado los dragones
+            if (mazmorra.root() == 1) nDrag++;
+            draconis(mazmorra.left(), cont, nDrag, mNodo);
+            draconis(mazmorra.right(), cont, nDrag, mNodo);
         }
     }
 }
@@ -81,15 +34,14 @@ void resuelveCaso()
     bintree<int> arbol;
 
     arbol = leerArbol(-1);
-
-    int salida = -1;
-    int nDragones = 0;
+    int salida = 3;
+    int nDragones = 0, cont = INT_MAX;
 
     if (!arbol.empty() && arbol.root() == 0)
-        resolver(arbol, nDragones, salida);
+        draconis(arbol, cont, nDragones, salida);
 
-    if (salida != -1)
-        cout << salida;
+    //if (salida != -1)
+    cout << salida;
 
     cout << "\n";
 }
